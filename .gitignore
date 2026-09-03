@@ -1,0 +1,8 @@
+# Bet records are private. `bets/*` rather than `bets/` so the negation below
+# can still take effect — git does not descend into an excluded directory, so a
+# bare `bets/` would make .gitkeep uncommittable and the directory would be
+# missing from a fresh clone.
+bets/*
+!bets/.gitkeep
+
+.DS_Store
