@@ -140,4 +140,7 @@ reference implementation of the spec:
 uvx skills-ref validate skills/bet-frame
 ```
 
-`skills-ref` is alpha and not required — `scripts/check.sh` is the gate.
+`skills-ref` is alpha, needs Python 3.11+, and is not required —
+`scripts/check.sh` is the gate and runs anywhere with a POSIX shell. If
+`skills-ref` disagrees with it, investigate rather than assuming either is
+right.
