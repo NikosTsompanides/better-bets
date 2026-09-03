@@ -1,0 +1,8 @@
+{
+  "name": "better-bets",
+  "version": "0.1.0",
+  "description": "Five skills for making decisions under uncertainty, based on Annie Duke's Thinking in Bets. Frame, evaluate, experiment, update, review.",
+  "author": {
+    "name": "Nikos Tsompanidis"
+  }
+}

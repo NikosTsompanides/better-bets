@@ -1,0 +1,27 @@
+{
+  "name": "better-bets",
+  "owner": {
+    "name": "Nikos Tsompanidis"
+  },
+  "metadata": {
+    "description": "Decision-making skills for agentic tools",
+    "version": "0.1.0"
+  },
+  "plugins": [
+    {
+      "name": "better-bets",
+      "description": "Five skills for making decisions under uncertainty, based on Annie Duke's Thinking in Bets. Frame, evaluate, experiment, update, review.",
+      "author": {
+        "name": "Nikos Tsompanidis"
+      },
+      "tags": [
+        "decision-making",
+        "thinking-in-bets",
+        "uncertainty",
+        "product-strategy",
+        "knowledge-management"
+      ],
+      "source": "./"
+    }
+  ]
+}
