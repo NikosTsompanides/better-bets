@@ -18,13 +18,20 @@ SHARED_FILE="$ROOT/shared/bet-protocol.md"
 
 START='<!-- shared:bet-protocol start -->'
 END='<!-- shared:bet-protocol end -->'
+
+# The sentinels are constants, so escape them for use as sed addresses once
+# rather than on every hash.
+escape_for_sed() { printf '%s' "$1" | sed 's/[]\/$*.^[]/\\&/g'; }
+ESTART=$(escape_for_sed "$START")
+EEND=$(escape_for_sed "$END")
 SPEC_KEYS=' name description license compatibility metadata allowed-tools '
 MAX_NAME=64
 MAX_DESC=1024
 MAX_BODY=500
 
-status=0
-fail() { printf 'FAIL  %s\n' "$*" >&2; status=1; }
+# Not named `status`: that is a read-only special variable in zsh.
+exit_status=0
+fail() { printf 'FAIL  %s\n' "$*" >&2; exit_status=1; }
 pass() { printf 'ok    %s\n' "$*"; }
 
 # ---------------------------------------------------------------- conformance
@@ -53,18 +60,26 @@ check_skill() {
     # Only column-zero keys are frontmatter fields. Indented lines are nested
     # values -- a conformant `metadata:` map would be falsely rejected if this
     # matched at any indentation.
-    printf '%s\n' "$fm" | grep -E '^[A-Za-z][A-Za-z0-9_-]*:' | sed 's/:.*//' |
-    while read -r key; do
-        case "$SPEC_KEYS" in
-            *" $key "*) ;;
-            *) printf 'FAIL  %s: frontmatter key "%s" is outside the six-field spec whitelist\n' "$slug" "$key" >&2
-               printf 'x' >> "$TMP/violations" ;;
-        esac
+    unknown_keys=$(printf '%s\n' "$fm" | grep -E '^[A-Za-z][A-Za-z0-9_-]*:' | sed 's/:.*//' |
+        while read -r key; do
+            # Leading '(' on each pattern: inside $( ), bash 3.2 ends the
+            # substitution at the first unbalanced ')'. POSIX permits it.
+            case "$SPEC_KEYS" in
+                (*" $key "*) ;;
+                (*) printf '%s\n' "$key" ;;
+            esac
+        done)
+    # `for` runs in the current shell, so fail() sets exit_status here. A `while`
+    # fed by a pipe would not -- POSIX runs it in a subshell. Keys match
+    # [A-Za-z][A-Za-z0-9_-]* so word-splitting is safe.
+    for key in $unknown_keys; do
+        fail "$slug: frontmatter key \"$key\" is outside the six-field spec whitelist"
     done
 
     name=$(printf '%s\n' "$fm" | sed -n 's/^name:[[:space:]]*//p' | head -n 1)
     desc=$(printf '%s\n' "$fm" | sed -n 's/^description:[[:space:]]*//p' | head -n 1)
-    desc=$(printf '%s' "$desc" | sed 's/^"//; s/"$//')
+    desc=${desc#\"}
+    desc=${desc%\"}
 
     [ -n "$name" ] || fail "$slug: name is missing"
     if [ -n "$name" ]; then
@@ -98,8 +113,7 @@ sentinel_count() {
 
 block_hash() {
     # Hash only the text between the sentinels, exclusive of the markers.
-    sed -n "/$(printf '%s' "$START" | sed 's/[]\/$*.^[]/\\&/g')/,/$(printf '%s' "$END" | sed 's/[]\/$*.^[]/\\&/g')/p" "$1" |
-        sed '1d;$d' | cksum | cut -d' ' -f1
+    sed -n "/$ESTART/,/$EEND/p" "$1" | sed '1d;$d' | cksum | cut -d' ' -f1
 }
 
 check_block_present() {
@@ -115,10 +129,6 @@ check_block_present() {
 
 # ----------------------------------------------------------------------- main
 
-TMP=$(mktemp -d)
-trap 'rm -rf "$TMP"' EXIT
-: > "$TMP/violations"
-
 found=0
 for dir in "$SKILLS_DIR"/bet-*; do
     [ -d "$dir" ] || continue
@@ -132,36 +142,40 @@ else
     pass "conformance: checked $found skill(s)"
 fi
 
-[ -s "$TMP/violations" ] && status=1
-
 if [ ! -f "$SHARED_FILE" ]; then
     fail "authoring source $SHARED_FILE is missing"
 else
-    hashes=""
+    # "<hash>  <path>" per contributor, recorded once so the failure report
+    # does not re-derive what the comparison already computed.
+    records=""
+    source_ok=0
+    copies_ok=0
     if check_block_present "$SHARED_FILE" "shared/bet-protocol.md"; then
-        hashes="$(block_hash "$SHARED_FILE")"
+        records="$(block_hash "$SHARED_FILE")  $SHARED_FILE"
+        source_ok=1
     fi
     for dir in "$SKILLS_DIR"/bet-*; do
         [ -d "$dir" ] || continue
         f="$dir/SKILL.md"
         [ -f "$f" ] || continue
         if check_block_present "$f" "$(basename "$dir")"; then
-            hashes="$hashes
-$(block_hash "$f")"
+            records="$records
+$(block_hash "$f")  $f"
+            copies_ok=$((copies_ok + 1))
         fi
     done
-    distinct=$(printf '%s\n' "$hashes" | grep -v '^$' | sort -u | wc -l | tr -d ' ')
-    if [ "$distinct" -eq 1 ]; then
+    distinct=$(printf '%s\n' "$records" | grep -v '^$' | awk '{print $1}' | sort -u | wc -l | tr -d ' ')
+
+    # Agreement is only meaningful if everyone expected to agree took part. A
+    # file that failed the sentinel check contributed no hash, so judging on
+    # `distinct` alone would report agreement among whoever happened to show up.
+    if [ "$source_ok" -eq 1 ] && [ "$copies_ok" -eq "$found" ] && [ "$distinct" -eq 1 ]; then
         pass "drift: shared block identical across source and $found copies"
-    elif [ "$distinct" -gt 1 ]; then
-        fail "drift: shared block has $distinct distinct versions across the source and its copies"
-        for dir in "$SKILLS_DIR"/bet-*; do
-            [ -d "$dir" ] || continue
-            printf '        %s  %s\n' "$(block_hash "$dir/SKILL.md")" "$dir/SKILL.md" >&2
-        done
-        printf '        %s  %s\n' "$(block_hash "$SHARED_FILE")" "$SHARED_FILE" >&2
+    else
+        fail "drift: not verified (source $source_ok/1, copies $copies_ok/$found, distinct hashes $distinct)"
+        printf '%s\n' "$records" | grep -v '^$' | sed 's/^/        /' >&2
     fi
 fi
 
-[ "$status" -eq 0 ] && printf '\nAll checks passed.\n'
-exit "$status"
+[ "$exit_status" -eq 0 ] && printf '\nAll checks passed.\n'
+exit "$exit_status"
