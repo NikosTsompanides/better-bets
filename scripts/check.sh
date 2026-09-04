@@ -90,6 +90,16 @@ check_skill() {
     fi
 
     [ -n "$desc" ] || fail "$slug: description is missing"
+
+    # A plain (unquoted) YAML scalar cannot contain ": " or " #" -- the first
+    # reads as a nested mapping, the second as a comment. Line-matching would
+    # accept both; a real YAML parser rejects the whole frontmatter, so the
+    # skill silently disappears from tools that parse it properly.
+    case "$desc" in
+        '"'*|"'"*) ;;
+        *": "*)  fail "$slug: unquoted description contains \": \" -- breaks YAML parsing" ;;
+        *" #"*)  fail "$slug: unquoted description contains \" #\" -- starts a YAML comment" ;;
+    esac
     [ "${#desc}" -le "$MAX_DESC" ] || fail "$slug: description is ${#desc} characters, limit is $MAX_DESC"
 
     [ "$body_lines" -lt "$MAX_BODY" ] ||

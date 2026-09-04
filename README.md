@@ -31,19 +31,23 @@ More in [docs/philosophy.md](docs/philosophy.md).
 They follow a decision's life, not the sections of one analysis. Each works on
 its own; together they hand off through a single file per bet.
 
-| Skill | What it does | When |
-|---|---|---|
-| `bet-frame` | Sharpens a vague or solution-shaped question into an answerable one; separates facts from assumptions, inferences, and opinions; names the unknowns that matter | Start here |
-| `bet-evaluate` | Confidence with its basis, stakes, blast radius, reversibility, alternatives, and how big a bet this is | Once framed |
-| `bet-experiment` | The cheapest test that would actually move you, with criteria set before it runs — or a plain "not worth testing" | When one unknown decides it |
-| `bet-update` | Commit on the evidence you have, with criteria for what would change your mind; later, revise when it does | Deciding, or evidence arrived |
-| `bet-review` | Judge the reasoning on what was known at the time, not on how it turned out | Outcome is in |
+
+| Skill            | What it does                                                                                                                                                    | When                          |
+| ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------- |
+| `bet-frame`      | Sharpens a vague or solution-shaped question into an answerable one; separates facts from assumptions, inferences, and opinions; names the unknowns that matter | Start here                    |
+| `bet-evaluate`   | Confidence with its basis, stakes, blast radius, reversibility, alternatives, and how big a bet this is                                                         | Once framed                   |
+| `bet-experiment` | The cheapest test that would actually move you, with criteria set before it runs — or a plain "not worth testing"                                               | When one unknown decides it   |
+| `bet-update`     | Commit on the evidence you have, with criteria for what would change your mind; later, revise when it does                                                      | Deciding, or evidence arrived |
+| `bet-review`     | Judge the reasoning on what was known at the time, not on how it turned out                                                                                     | Outcome is in                 |
+
 
 ```
 frame ──► evaluate ──► experiment ──► update ──► review
    ▲                                               │
    └──────────── beliefs updated ──────────────────┘
 ```
+
+
 
 ## Install
 
@@ -95,7 +99,7 @@ what you believed *before* you knew the outcome, which is the only thing that
 makes an honest review possible later.
 
 Files go to `~/bets/`, or to a `bets/` directory that already exists in your
-project. **No skill will create a `bets/` directory in a project that does not
+project. **No skill will create a** `bets/` **directory in a project that does not
 have one** — installing this will not scatter files through your repositories.
 
 There is no index. Open bets are a search:
@@ -118,6 +122,8 @@ once, give the directory its own repository:
 ```sh
 cd ~/bets && git init
 ```
+
+
 
 ## Examples
 
@@ -149,4 +155,4 @@ the one piece of this that is currently a guess.
 
 ## Licence
 
-Apache-2.0. The framework is Annie Duke's; the mistakes in adapting it are mine.
+Apache-2.0. The framework is Annie Duke's; **the mistakes in adapting it are mine.**

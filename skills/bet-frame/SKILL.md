@@ -1,6 +1,6 @@
 ---
 name: bet-frame
-description: Frame a consequential decision as a bet before committing to it — sharpen a vague question into an answerable one, separate what is known from what is merely assumed, and name the unknowns that actually matter. Use when someone is weighing a decision, says they are torn or unsure, asks whether to do something consequential, or presents a solution whose underlying problem has not been established. Domain-neutral: engineering, hiring, product, strategy, personal. This is the entry point; bet-evaluate sizes the bet afterwards.
+description: Frame a consequential decision as a bet before committing to it — sharpen a vague question into an answerable one, separate what is known from what is merely assumed, and name the unknowns that actually matter. Use when someone is weighing a decision, says they are torn or unsure, asks whether to do something consequential, or presents a solution whose underlying problem has not been established. Domain-neutral — engineering, hiring, product, strategy, personal. This is the entry point; bet-evaluate sizes the bet afterwards.
 license: Apache-2.0
 ---
 
