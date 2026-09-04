@@ -1,7 +1,7 @@
 # Better Bets
 
 Five [Agent Skills](https://agentskills.io) for making decisions under
-uncertainty, based on Annie Duke's *Thinking in Bets*.
+uncertainty, based on [Annie Duke's](https://www.amazon.co.uk/stores/Annie-Duke/author/B001K88E4U?ref=ap_rdr&shoppingPortalEnabled=true) [*Thinking in Bets: Making Smarter Decisions When You Don't Have All the Facts*](https://www.amazon.co.uk/Thinking-Bets-Making-Smarter-Decisions/dp/0735216355).
 
 They work in Claude Code, Codex, Cursor, OpenCode, Gemini CLI, and any other
 tool that reads the Agent Skills standard. Nothing to build, nothing to
