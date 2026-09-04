@@ -6,3 +6,6 @@ bets/*
 !bets/.gitkeep
 
 .DS_Store
+
+# Planning artifacts stay local.
+docs/plans/
