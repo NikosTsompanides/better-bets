@@ -52,7 +52,17 @@ frame ──► evaluate ──► experiment ──► update ──► review
 ## Install
 
 ```sh
-git clone https://github.com/<you>/better-bets.git
+npx skills add NikosTsompanides/better-bets --skill '*'
+```
+
+That installs all five into whichever agent you pick. `--list` shows them
+first; `--skill bet-frame` takes just one.
+
+Or copy the directories yourself — two copies cover every tool whose path is
+confirmed:
+
+```sh
+git clone https://github.com/NikosTsompanides/better-bets.git
 cd better-bets
 
 # Codex, Cursor, OpenCode, Gemini CLI

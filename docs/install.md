@@ -6,10 +6,26 @@ There is no build step and nothing to compile.
 
 ## The short version
 
+```sh
+npx skills add NikosTsompanides/better-bets --skill '*'
+```
+
+[Vercel Labs' `skills` CLI](https://github.com/vercel-labs/skills) treats
+GitHub as the registry and discovers `skills/<name>/SKILL.md` natively, so
+there is nothing to register and no manifest beyond what is already here. It
+prompts for which agent to install into.
+
+```sh
+npx skills add NikosTsompanides/better-bets --list              # see the five before installing
+npx skills add NikosTsompanides/better-bets --skill bet-frame   # just one
+```
+
+## Installing by hand
+
 Two copies cover every tool whose path this project has confirmed:
 
 ```sh
-git clone https://github.com/<you>/better-bets.git
+git clone https://github.com/NikosTsompanides/better-bets.git
 cd better-bets
 
 # Codex, Cursor, OpenCode, Gemini CLI
@@ -56,7 +72,7 @@ Optional. It gets you a one-command install and, in Claude Code, a
 **Claude Code**
 
 ```
-/plugin marketplace add <you>/better-bets
+/plugin marketplace add NikosTsompanides/better-bets
 /plugin install better-bets@better-bets
 ```
 
@@ -65,7 +81,7 @@ Skills then appear as `/better-bets:bet-frame` and so on.
 **Gemini CLI**
 
 ```sh
-gemini extensions install https://github.com/<you>/better-bets
+gemini extensions install https://github.com/NikosTsompanides/better-bets
 ```
 
 Gemini discovers skills from the extension's `skills/` directory — no manifest
