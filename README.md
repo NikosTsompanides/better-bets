@@ -1,5 +1,8 @@
 # Better Bets
 
+[![skills.sh](https://skills.sh/b/NikosTsompanides/better-bets)](https://skills.sh/NikosTsompanides/better-bets)
+
+
 Five [Agent Skills](https://agentskills.io) for making decisions under
 uncertainty, based on [Annie Duke's](https://www.amazon.co.uk/stores/Annie-Duke/author/B001K88E4U?ref=ap_rdr&shoppingPortalEnabled=true) [*Thinking in Bets: Making Smarter Decisions When You Don't Have All the Facts*](https://www.amazon.co.uk/Thinking-Bets-Making-Smarter-Decisions/dp/0735216355).
 
