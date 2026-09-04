@@ -165,4 +165,4 @@ the one piece of this that is currently a guess.
 
 ## Licence
 
-Apache-2.0. The framework is Annie Duke's; **the mistakes in adapting it are mine.**
+Apache-2.0. The framework is based on Annie Duke's ideas; **the mistakes in adapting it are mine.**
